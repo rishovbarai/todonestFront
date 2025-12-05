@@ -1,14 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: process.env.NODE_ENV === 'development' },
   css: ['~/assets/scss/main.scss'],
-  ssr: false, // Disable SSR for static site generation (SPA mode)
-  nitro: {
-    preset: 'static', // Explicitly set to static preset
-    prerender: {
-      crawlLinks: true,
-    },
-  },
+  ssr: false, // Disable SSR for static site generation
   app: {
     head: {
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1',

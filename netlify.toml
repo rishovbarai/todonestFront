@@ -1,18 +1,8 @@
 [build]
-  command = "npm run generate"
+  command = "npm ci && npm run generate"
   publish = ".output/public"
-  ignore = ".netlifyignore"
-
-[build.environment]
-  NODE_VERSION = "18"
-  NPM_FLAGS = "--legacy-peer-deps"
-
-# Disable serverless functions detection
-[functions]
-  directory = ""
 
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
