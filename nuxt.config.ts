@@ -2,7 +2,13 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/scss/main.scss'],
-  ssr: false, // Disable SSR for static site generation
+  ssr: false, // Disable SSR for static site generation (SPA mode)
+  nitro: {
+    preset: 'static', // Explicitly set to static preset
+    prerender: {
+      crawlLinks: true,
+    },
+  },
   app: {
     head: {
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1',

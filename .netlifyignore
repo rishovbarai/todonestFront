@@ -1,0 +1,4 @@
+.output/server
+.netlify/functions-internal
+.netlify/functions
+
