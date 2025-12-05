@@ -7,10 +7,9 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare || true"
   },
   "devDependencies": {
-    "@nuxt/devtools": "latest",
     "nuxt": "^3.8.0",
     "sass": "^1.69.5"
   },

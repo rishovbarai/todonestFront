@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: process.env.NODE_ENV === 'development' },
+  devtools: false, // Disable devtools completely to avoid native binding issues
   css: ['~/assets/scss/main.scss'],
   ssr: false, // Disable SSR for static site generation
   app: {
