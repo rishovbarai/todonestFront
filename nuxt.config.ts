@@ -3,6 +3,9 @@ export default defineNuxtConfig({
   devtools: false, // Disable devtools completely to avoid native binding issues
   css: ['~/assets/scss/main.scss'],
   ssr: false, // Disable SSR for static site generation
+  nitro: {
+    preset: 'static', // Force static preset instead of auto-detecting Netlify
+  },
   app: {
     head: {
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
