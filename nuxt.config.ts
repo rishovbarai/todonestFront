@@ -2,6 +2,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: true },
   css: ['~/assets/scss/main.scss'],
+  ssr: false, // Disable SSR for static site generation
   app: {
     head: {
       viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
