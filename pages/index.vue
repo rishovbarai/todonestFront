@@ -59,6 +59,7 @@
           v-for="task in todos"
           :key="task.id"
           :task="task"
+          :is-toggling="togglingTaskId === task.id"
           @edit="handleEdit"
           @delete="handleDelete"
           @toggle="handleToggle"
@@ -110,8 +111,11 @@
           <div class="edit-modal-footer">
             <button v-if="editingTask" class="btn-delete-task" @click="handleDeleteFromEdit">Delete</button>
             <div class="edit-footer-buttons">
-              <button class="btn-edit-cancel" @click="closeModal">Cancel</button>
-              <button class="btn-edit-save" @click="saveTask">Save</button>
+              <button class="btn-edit-cancel" @click="closeModal" :disabled="isSaving">Cancel</button>
+              <button class="btn-edit-save" @click="saveTask" :disabled="isSaving">
+                <span v-if="isSaving" class="btn-loader"></span>
+                <span v-else>Save</span>
+              </button>
             </div>
           </div>
         </div>
@@ -140,8 +144,11 @@
             </div>
           </div>
           <div class="delete-modal-footer">
-            <button class="btn-delete-cancel" @click="closeDeleteModal">Cancel</button>
-            <button class="btn-delete-confirm" @click="confirmDelete">Delete</button>
+            <button class="btn-delete-cancel" @click="closeDeleteModal" :disabled="isDeleting">Cancel</button>
+            <button class="btn-delete-confirm" @click="confirmDelete" :disabled="isDeleting">
+              <span v-if="isDeleting" class="btn-loader"></span>
+              <span v-else>Delete</span>
+            </button>
           </div>
         </div>
       </div>
@@ -162,6 +169,10 @@ const deletingTask = ref<Todo | null>(null);
 const taskInput = ref('');
 const showDeleteSuccess = ref(false);
 const showEditSuccess = ref(false);
+const isLoading = ref(false);
+const isDeleting = ref(false);
+const isSaving = ref(false);
+const togglingTaskId = ref<number | null>(null);
 
 onMounted(async () => {
   await loadTodos();
@@ -201,6 +212,7 @@ const handleDeleteFromEdit = () => {
 
 const confirmDelete = async () => {
   if (deletingTask.value) {
+    isDeleting.value = true;
     try {
       await deleteTodo(deletingTask.value.id);
       await loadTodos();
@@ -212,6 +224,8 @@ const confirmDelete = async () => {
       }, 3000);
     } catch (error) {
       console.error('Failed to delete todo:', error);
+    } finally {
+      isDeleting.value = false;
     }
   }
 };
@@ -228,11 +242,14 @@ const closeDeleteModal = () => {
 const handleToggle = async (id: number) => {
   const task = todos.value.find(t => t.id === id);
   if (task) {
+    togglingTaskId.value = id;
     try {
       await updateTodo(id, { completed: !task.completed });
       await loadTodos();
     } catch (error) {
       console.error('Failed to update todo:', error);
+    } finally {
+      togglingTaskId.value = null;
     }
   }
 };
@@ -244,8 +261,9 @@ const closeModal = () => {
 };
 
 const saveTask = async () => {
-  if (!taskInput.value.trim()) return;
+  if (!taskInput.value.trim() || isSaving.value) return;
 
+  isSaving.value = true;
   try {
     const wasEditing = !!editingTask.value;
     if (editingTask.value) {
@@ -265,6 +283,8 @@ const saveTask = async () => {
     }
   } catch (error) {
     console.error('Failed to save todo:', error);
+  } finally {
+    isSaving.value = false;
   }
 };
 
@@ -860,12 +880,17 @@ const dismissEditSuccessAlert = () => {
   line-height: 16px;
   color: #191919;
   
-  &:hover {
+  &:hover:not(:disabled) {
     opacity: 0.9;
   }
   
-  &:active {
+  &:active:not(:disabled) {
     opacity: 0.8;
+  }
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
   }
 }
 
@@ -885,6 +910,7 @@ const dismissEditSuccessAlert = () => {
   flex: none;
   order: 1;
   flex-grow: 0;
+  position: relative;
   
   font-family: 'Arial';
   font-style: normal;
@@ -893,12 +919,17 @@ const dismissEditSuccessAlert = () => {
   line-height: 16px;
   color: #191919;
   
-  &:hover {
+  &:hover:not(:disabled) {
     opacity: 0.9;
   }
   
-  &:active {
+  &:active:not(:disabled) {
     opacity: 0.8;
+  }
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 }
 
@@ -1102,12 +1133,17 @@ const dismissEditSuccessAlert = () => {
   line-height: 16px;
   color: #191919;
   
-  &:hover {
+  &:hover:not(:disabled) {
     opacity: 0.9;
   }
   
-  &:active {
+  &:active:not(:disabled) {
     opacity: 0.8;
+  }
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
   }
 }
 
@@ -1127,6 +1163,7 @@ const dismissEditSuccessAlert = () => {
   flex: none;
   order: 1;
   flex-grow: 0;
+  position: relative;
   
   font-family: 'Arial';
   font-style: normal;
@@ -1135,12 +1172,17 @@ const dismissEditSuccessAlert = () => {
   line-height: 16px;
   color: #191919;
   
-  &:hover {
+  &:hover:not(:disabled) {
     opacity: 0.9;
   }
   
-  &:active {
+  &:active:not(:disabled) {
     opacity: 0.8;
+  }
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
   }
 }
 
@@ -1549,6 +1591,23 @@ const dismissEditSuccessAlert = () => {
 @media (max-width: 768px) {
   .mobile-bottom-container {
     display: flex;
+  }
+}
+
+// Loader spinner styles
+.btn-loader {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(25, 25, 25, 0.3);
+  border-top-color: #191919;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 </style>

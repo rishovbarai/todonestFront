@@ -5,9 +5,12 @@
         <input
           type="checkbox"
           :checked="task.completed"
+          :disabled="isToggling"
           @change="toggleComplete"
           class="radio-input"
+          :class="{ 'loading': isToggling }"
         />
+        <span v-if="isToggling" class="checkbox-loader"></span>
       </div>
       <span class="task-text" :class="{ completed: task.completed }">
         {{ task.title }}
@@ -31,9 +34,12 @@ import deleteIcon from '~/assets/images/delete-icon.png';
 
 interface Props {
   task: Todo;
+  isToggling?: boolean;
 }
 
-const props = defineProps<Props>();
+const props = withDefaults(defineProps<Props>(), {
+  isToggling: false,
+});
 const emit = defineEmits<{
   edit: [id: number];
   delete: [id: number];
@@ -95,6 +101,7 @@ const toggleComplete = () => {
   border: 1.5px solid #D0D0D0;
   border-radius: 50%;
   position: relative;
+  transition: opacity 0.2s;
   
   &:checked {
     background: #FFC627;
@@ -117,8 +124,36 @@ const toggleComplete = () => {
     }
   }
   
-  &:hover {
+  &:hover:not(:disabled) {
     border-color: #8C1D40;
+  }
+  
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  &.loading {
+    opacity: 0.7;
+  }
+}
+
+.checkbox-loader {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid #D0D0D0;
+  border-top-color: #8C1D40;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
   }
 }
 
