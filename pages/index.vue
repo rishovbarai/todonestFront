@@ -139,7 +139,7 @@
           <div class="delete-modal-content">
             <div class="delete-modal-label">
               <span class="delete-confirmation-text">
-                Are you sure you want to delete this task? This action cannot be undone.
+                Are you sure you want to delete the following task: <strong>{{ deletingTask?.title }}</strong>
               </span>
             </div>
           </div>
