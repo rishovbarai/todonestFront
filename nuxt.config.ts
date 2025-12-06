@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      apiBase: process.env.API_BASE_URL || 'https://todo-backend-production-8ea7.up.railway.app/api',
+      apiBase: process.env.API_BASE_URL || 'https://todonest-uzhd.onrender.com/api',
     },
   },
 });
