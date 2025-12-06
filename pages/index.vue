@@ -1058,8 +1058,9 @@ const dismissEditSuccessAlert = () => {
   padding: 16px;
   gap: 24px;
   width: 498px;
-  height: 88px;
-  overflow-y: scroll;
+  min-height: 88px;
+  height: auto;
+  overflow-y: visible;
   flex: none;
   order: 1;
   align-self: stretch;
@@ -1068,11 +1069,12 @@ const dismissEditSuccessAlert = () => {
 .delete-modal-label {
   display: flex;
   flex-direction: row;
-  align-items: flex-end;
+  align-items: flex-start;
   padding: 0px 0px 8px;
   gap: 4px;
   width: 466px;
-  height: 56px;
+  min-height: 56px;
+  height: auto;
   background: rgba(255, 255, 255, 1e-06);
   flex: none;
   order: 0;
@@ -1242,7 +1244,8 @@ const dismissEditSuccessAlert = () => {
   .delete-modal-content {
     position: absolute;
     width: 343px;
-    height: 72px;
+    min-height: 72px;
+    height: auto;
     left: 16px;
     top: 79px;
     padding: 0;
@@ -1251,16 +1254,23 @@ const dismissEditSuccessAlert = () => {
 
   .delete-modal-label {
     width: 343px;
-    height: 72px;
+    min-height: 72px;
+    height: auto;
     padding: 0;
     align-items: flex-start;
   }
 
   .delete-confirmation-text {
     width: 343px;
-    height: 72px;
+    min-height: 72px;
+    height: auto;
     font-size: 16px;
     line-height: 24px;
+    
+    strong {
+      font-weight: 700;
+      color: #191919;
+    }
   }
 
   .delete-modal-footer {
