@@ -1081,7 +1081,8 @@ const dismissEditSuccessAlert = () => {
 
 .delete-confirmation-text {
   width: 357px;
-  height: 48px;
+  min-height: 48px;
+  height: auto;
   font-family: 'Arial';
   font-style: normal;
   font-weight: 400;
@@ -1091,6 +1092,11 @@ const dismissEditSuccessAlert = () => {
   flex: none;
   order: 0;
   flex-grow: 0;
+  
+  strong {
+    font-weight: 700;
+    color: #191919;
+  }
 }
 
 .delete-modal-footer {
